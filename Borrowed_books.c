@@ -6,15 +6,17 @@ Description:Program to store and record borrowed book titles for a local library
 
 //Pre processor directives
 #include<stdio.h>
-#include<stdlib.h>
- 
+
  int main(){
- 	char bookTitle[200];
  	FILE *fptr;//file pointer declaration
+ 	char bookTitle[50];
+ 	char date[20];
+ 	char choice;
+ 	int ch;
  	
   //Libary banner on console
  	printf("--------------------------------------\n");
- 	printf("        Sunrise Public Library         \n");
+ 	printf("        Masomo Local Library         \n");
  	printf("      Borrowed Books Logging System     \n");
  	printf("----------------------------------------\n");
   //Creating the file in append mode
@@ -23,24 +25,46 @@ fptr = fopen("C:\\Users\\Administrator\\Desktop\\C programs\\Borrowed_books.txt"
 //checking successful opening
 if (fptr == NULL){
 	printf("Error!Could not create the file.\n");
-	return 1;
+	return 1;//Exit program with error status
 }
-//output on libarians screen
-printf("File created successfully!\n");
 
 // Get librarians input
-printf("Enter book title: ");
-fgets(bookTitle,200,stdin);
+do {
+printf("Enter the book title: ");
+fgets(bookTitle,100,stdin);
 
+printf("Enter the date (DD/MM/YYYY): ");
+fgets(date,20,stdin);
+
+ //Writing book title nand date of purchase to file
+ fprintf(fptr,"------------------------------------------\n");
+ fprintf(fptr,"Title: %s\n", bookTitle);
+ fprintf(fptr,"Date: %s\n", date);
+ fprintf(fptr,"--------------------------------------------\n");
  
- //Writing book title to file
- fprintf(fptr,"The book title is: %s\n", bookTitle);
+ printf("Do you want to add another book? (y/n):");
+ scanf("%c",&choice);
+ getchar();// Clear newline left by scanf
+}
+while(choice == 'y' || choice == 'Y');
  
  fclose(fptr);//closing the file
- printf("\n The book title has been sucessfully stored on your desktop!\n");
+
+ printf("\n All book entries saved successfully!\n");
+ printf("Here is the current list of books:\n\n");
  
+ //Open file in read mode to display all books
+ fptr = fopen("C:\\Users\\Administrator\\Desktop\\C programs\\Borrowed_books.txt","r");
+ //checking error
+ if(fptr == NULL){
+	 printf("Error!Could not open file for reading.\n");
+	 return 1;//Exit program with error status
+ }
+ //Read the file character by character unti EOF
+ while((ch = fgetc(fptr)) != EOF){
+ 	putchar (ch);//print each character
+ } 
+ fclose(fptr);//close file
 
-
- 	 
  	 return 0;
  }
